@@ -20,7 +20,7 @@ async fn retrieve(path: web::Path<i32>, state: web::Data<AppState>) -> Result<Js
     Ok(Json(todo))
 }
 
-#[post("")]
+#[post("/add")]
 async fn add(todo: web::Json<TodoNew>, state: web::Data<AppState>) -> Result<Json<Todo>> {
     let todo = sqlx::query_as("INSERT INTO todos(note) VALUES ($1) RETURNING id, note")
         .bind(&todo.note)
