@@ -3,6 +3,26 @@
 version = 3
 
 [[package]]
+name = "actix-web-shuttle-app"
+version = "0.1.0"
+dependencies = [
+ "axum",
+ "cookie",
+ "http",
+ "http-body",
+ "pbkdf2",
+ "rand_chacha",
+ "rand_core",
+ "shuttle-axum",
+ "shuttle-runtime",
+ "shuttle-service",
+ "shuttle-shared-db",
+ "sqlx",
+ "tera",
+ "tokio",
+]
+
+[[package]]
 name = "addr2line"
 version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -167,26 +187,6 @@ dependencies = [
  "rustversion",
  "tower-layer",
  "tower-service",
-]
-
-[[package]]
-name = "axum-postgres-authentication"
-version = "0.1.0"
-dependencies = [
- "axum",
- "cookie",
- "http",
- "http-body",
- "pbkdf2",
- "rand_chacha",
- "rand_core",
- "shuttle-axum",
- "shuttle-runtime",
- "shuttle-service",
- "shuttle-shared-db",
- "sqlx",
- "tera",
- "tokio",
 ]
 
 [[package]]
