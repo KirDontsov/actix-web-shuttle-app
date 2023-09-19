@@ -1,5 +1,5 @@
 [package]
-name = "axum-postgres-authentication"
+name = "actix-web-shuttle-app"
 version = "0.1.0"
 edition = "2021"
 
