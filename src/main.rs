@@ -10,26 +10,25 @@ use shuttle_runtime::{CustomError};
 use sqlx::{Executor, FromRow, PgPool};
 
 #[get("/{id}")]
-async fn retrieve(path: web::Path<i32>, state: web::Data<AppState>) -> Result<Json<User>> {
-    let user = sqlx::query_as("SELECT * FROM users WHERE id = $1")
+async fn retrieve(path: web::Path<i32>, state: web::Data<AppState>) -> Result<Json<Todo>> {
+    let todo = sqlx::query_as("SELECT * FROM todos WHERE id = $1")
         .bind(*path)
         .fetch_one(&state.pool)
         .await
         .map_err(|e| error::ErrorBadRequest(e.to_string()))?;
 
-    Ok(Json(user))
+    Ok(Json(todo))
 }
 
-#[post("/add")]
-async fn add(user: web::Json<NewUser>, state: web::Data<AppState>) -> Result<Json<User>> {
-    let user = sqlx::query_as("INSERT INTO users VALUES ($1) RETURNING id, username, password")
-        .bind(&user.username)
-        .bind(&user.password)
+#[post("")]
+async fn add(todo: web::Json<TodoNew>, state: web::Data<AppState>) -> Result<Json<Todo>> {
+    let todo = sqlx::query_as("INSERT INTO todos(note) VALUES ($1) RETURNING id, note")
+        .bind(&todo.note)
         .fetch_one(&state.pool)
         .await
         .map_err(|e| error::ErrorBadRequest(e.to_string()))?;
 
-    Ok(Json(user))
+    Ok(Json(todo))
 }
 
 #[derive(Clone)]
@@ -49,7 +48,7 @@ async fn actix_web(
 
     let config = move |cfg: &mut ServiceConfig| {
         cfg.service(
-            web::scope("/api")
+            web::scope("/todos")
                 .wrap(Logger::default())
                 .service(retrieve)
                 .service(add)
@@ -61,14 +60,12 @@ async fn actix_web(
 }
 
 #[derive(Deserialize)]
-struct NewUser {
-    pub username: String,
-    pub password: String,
+struct TodoNew {
+    pub note: String,
 }
 
 #[derive(Serialize, Deserialize, FromRow)]
-struct User {
+struct Todo {
     pub id: i32,
-    pub username: String,
-    pub password: String,
+    pub note: String,
 }
